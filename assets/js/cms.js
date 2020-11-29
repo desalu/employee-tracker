@@ -193,7 +193,7 @@ async function addEmployee () {
       name: 'managers',
       choices: managerList
     }).then(answer => {
-      console.log(answer);
+      
       let name = answer.managers.split(" ");
       if (answer.managers === "None") {
         newEmployee.push(null);
