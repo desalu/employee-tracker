@@ -110,18 +110,22 @@ async function addRole() {
       connection.query(query5, function (err, data) {
         if (err) throw err;
         for (let i = 0; i < data.length; i++) { 
+          console.log(answers.deptList);
+          console.log(data[i].name);
           if (answers.deptList === data[i].name) {
-            deptID = data[i].id;
+            deptID = data[i].department_id;
           }
         }
-      })
 
-      let query4 = "INSERT role (title, salary, department_id) VALUES (?, ?, ?)"
+        let query4 = "INSERT role (title, salary, department_id) VALUES (?, ?, ?)"
       connection.query(query4, [answers.role, answers.salary, deptID], function (err, res) {
         if (err) throw err;
         console.log(`Department ${answers.role} is now in the system`);
         runProgram();
       })
+
+      });
+
     });
 }
 
@@ -145,8 +149,6 @@ async function addEmployee () {
     .then(answers => {
       newEmployee.push(answers.first_name, answers.last_name);
     });
-  
-  console.log(newEmployee);
 
   let roleList = [];
 
@@ -191,11 +193,19 @@ async function addEmployee () {
       name: 'managers',
       choices: managerList
     }).then(answer => {
+      console.log(answer);
       let name = answer.managers.split(" ");
+      if (answer.managers === "None") {
+        newEmployee.push(null);
+      }
       for (let i = 0; i < data.length; i++) {
         if (data[i].first_name === name[0] && data[i].last_name === name[1]){
           newEmployee.push(data[i].id)
+          break;
         }
+       
+        
+     
         console.log(newEmployee);
       }
       let query3 = "INSERT employee (first_name, last_name, role_id, manager_id) VALUES (?)"
